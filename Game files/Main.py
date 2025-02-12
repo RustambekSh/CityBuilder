@@ -1,36 +1,35 @@
 import pygame
 import json
 import os
- 
-# Initialize Pygame
+
 pygame.init()
 
-# Screen setup
+
 SCREEN_WIDTH, SCREEN_HEIGHT = 1920, 1080
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
 pygame.display.set_caption("City Builder Game")
 
-# Colors
+
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 LIGHT_GRAY = (200, 200, 200)
 DARK_GRAY = (100, 100, 100)
 
-# Fonts
+
 font = pygame.font.Font(None, 36)
 
-# Game Variables
+
 clock = pygame.time.Clock()
 FPS = 60
 resources = {"wood": 100}
 buildings = []
 game_data_file = "save_data.json"
 
-# Load Images from assets folder
+
 tree_image = pygame.image.load("assets/tree.png")  # Tree image path
 house_image = pygame.image.load("assets/house.png")  # House image path
 
-# Scale Images for Consistency
+
 tree_image = pygame.transform.scale(tree_image, (50, 50))
 house_image = pygame.transform.scale(house_image, (70, 70))
 
@@ -40,7 +39,6 @@ building_types = [
     {"name": "House", "wood_cost": 50, "image": house_image},
 ]
 
-# Button Class
 class Button:
     def __init__(self, x, y, width, height, text, action):
         self.rect = pygame.Rect(x, y, width, height)
@@ -56,7 +54,7 @@ class Button:
     def is_clicked(self, pos):
         return self.rect.collidepoint(pos)
 
-# Functions
+
 def draw_text(text, x, y, color=BLACK):
     """Draw text on the screen."""
     label = font.render(text, True, color)
@@ -95,20 +93,17 @@ def gather_resources():
     """Gather wood resources over time."""
     resources["wood"] += 1
 
-# Create Buttons
 buttons = [
     Button(10, 10, 150, 50, "Plant Tree", lambda: "Tree"),
     Button(10, 70, 150, 50, "Build House", lambda: "House"),
 ]
 
-# Main Game Loop
 running = True
 load_game()
 
 while running:
     screen.fill(WHITE)
 
-    # Event Handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             save_game()
@@ -121,7 +116,6 @@ while running:
             if event.button == 1:  # Left click
                 x, y = event.pos
 
-                # Check if a button is clicked
                 for button in buttons:
                     if button.is_clicked((x, y)):
                         action = button.action()
@@ -130,34 +124,28 @@ while running:
                         elif action == "House":
                             add_building(x, y, building_types[1])
 
-                # Place buildings if clicking on empty space
-                if y > 150:  # Avoid placing on button UI
+                if y > 150:  
                     pass
 
-    # Update Logic
     gather_resources()
 
-    # Draw Resources
     draw_text(f"Wood: {resources['wood']}", 200, 20)
 
-    # Draw Buttons
     for button in buttons:
         button.draw(screen)
 
-    # Draw Buildings
     for building in buildings:
         screen.blit(building[house_image], (building["x"], building["y"]))
 
     pygame.display.flip()
     clock.tick(FPS)
 
-# Quit Pygame
+
 pygame.quit()
 import pygame
 import json
 import os
 
-# Initialize Pygame
 pygame.init()
 
 # Screen setup
